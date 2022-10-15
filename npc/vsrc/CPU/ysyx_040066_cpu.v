@@ -189,10 +189,10 @@ module ysyx_040066_cpu(
         out_valid<=module_wb.valid;
         done<=~rst&&module_wb.done;
         error<=module_wb.error||module_csr.wr_err;
-        if(out_valid&&error) begin
+        /*if(out_valid&&error) begin
             $display("ERROR DECTED! nxtpc=%h",pc_nxt);
             $finish;
-        end
+        end*/
 //        $display("error:%b %b,data_valid=%b",error,module_wb.error,data_Rd_error);
     end
 
