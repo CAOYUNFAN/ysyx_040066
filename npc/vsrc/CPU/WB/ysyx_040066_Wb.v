@@ -21,7 +21,7 @@ module ysyx_040066_Wb(
 
     reg wen_native,MemRd_native,MemWr_native,valid_native;
     reg done_native;
-    reg error_native,clean_up; always @(posedge clk) clean_up<=valid_native&&(data_error&&(MemRd_native||MemWr_native));
+    reg error_native;
     reg [4:0] rd_native;
     reg [63:0] data_native;
     reg [63:0] nxtpc_native;
@@ -29,7 +29,7 @@ module ysyx_040066_Wb(
     reg [2:0] addr_lowbit_native;
     always @(posedge clk) begin
         if(rst) valid_native<=0;
-        else if(~block) valid_native<=~clean_up&&valid_in;
+        else if(~block) valid_native<=valid_in;
     end
 
     always @(posedge clk) if(~block) begin

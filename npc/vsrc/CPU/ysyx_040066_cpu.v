@@ -171,7 +171,7 @@ module ysyx_040066_cpu(
     assign clear_mip=MemWr_line&&module_m.valid&&~MemWr;
 
     ysyx_040066_Wb module_wb(
-        .clk(clk),.rst(rst),.block((intr_rd||intr_wr)&&~(csr_jmp&&global_block)||m_block),
+        .clk(clk),.rst(rst),.block((intr_rd||intr_wr)&&~(csr_jmp&&global_block)),
         .valid_in(module_m.valid&&~m_block&&~intr_rd&&~intr_wr),.data_error(rd_time?t_err:data_error),
         .wen_in(module_m.RegWr&&module_m.valid),.MemRd_in(module_m.MemRd_native),.MemWr_in(module_m.MemWr_native),
         .done_in(module_m.done&&module_m.valid),.rd_in(module_m.rd),.data_in(module_m.data),
