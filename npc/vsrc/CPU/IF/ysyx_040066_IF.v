@@ -16,9 +16,9 @@ module ysyx_040066_IF (
     assign pc=native_pc;
     assign valid=~is_jmp;
 
+    `ifdef INSTR
     always @(*) begin
-        `ifdef INSTR
         if(~rst&&~clk) $display("IF:pc=%h,valid=%b,block=%b",pc,valid,block);
-        `endif
     end
+    `endif
 endmodule

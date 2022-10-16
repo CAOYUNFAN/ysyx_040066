@@ -67,10 +67,10 @@ module ysyx_040066_M (
     assign rd=rd_native;
     assign data=is_mul_native?mul_result:(is_div_native?div_result:addr);
 
+    `ifdef INSTR
     always @(*) begin
-        `ifdef INSTR
         if(~rst&&~clk) $display("M:nxtpc=%h,valid=%b,Memrd=%b,MemWr=%b,data=%h,error=%b",nxtpc,valid,MemRd_native,MemWr_native,data,error);
-        `endif 
     end
+    `endif 
 
 endmodule

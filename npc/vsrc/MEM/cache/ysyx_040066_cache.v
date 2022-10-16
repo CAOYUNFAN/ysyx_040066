@@ -186,12 +186,12 @@ module ysyx_040066_cache #(TAG_LEN=21,IDNEX_LEN=5,OFFSET_LEN=3,INDEX_NUM=64,LINE
         assign D[x][y*2+1:y*2]=wrr_data[x*2+1+y*8:x*2+y*8];
     end endgenerate
 
+    `ifdef fully_info
     always @(*) begin
-        `ifdef fully_info
         if(~rst&&~clk)begin
             $display("Cache:status=%b,tag=%h,index=%h,offset_native=%h,hit_0=%b,hit_1=%b,uncache=%b,valid=%b,rd_count=%b,ready_to_read=%b,last=%b",status,tag,index,offset_native,hit_0,hit_1,uncache,valid,rd_count,ready_to_read,rd_last);
             //$display("Cache:wen=%h,rd=%h",BWEN,rd);
         end
-        `endif
     end
+    `endif
 endmodule

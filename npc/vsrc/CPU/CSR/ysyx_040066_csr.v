@@ -99,11 +99,11 @@ module ysyx_040066_csr (
         end
     end
 
+    `ifdef INSTR
     always @(*) begin
-        `ifdef INSTR
         if(~rst&&~clk&&wen) $display("CSR:write %h",csr_wr_addr);
-        `endif
     end 
+    `endif
 
 endmodule
 
@@ -124,7 +124,7 @@ module ysyx_040066_csrwork(
         default: data=64'h114514;
     endcase
 
-    always@(*) begin
+//    always@(*) begin
 //        $display("csrctl=%h,csr_data=%h,data2=%h,data=%h",csrctl,csr_data,data2,data);
-    end
+//    end
 endmodule

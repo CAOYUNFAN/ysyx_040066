@@ -54,11 +54,11 @@ module ysyx_040066_Wb(
     assign done=done_native;
     assign valid=valid_native;//||Multi_wen_native||Div_wen_native;
 
+    `ifdef INSTR
     always @(*) begin
-        `ifdef INSTR
         if(~rst&&~clk) $display("WB:nxtpc=%h,data=%h,valid=%b,done=%b,error=%b",nxtpc,data,valid,done,error);
-        `endif
     end
+    `endif
 endmodule
 
 module ysyx_040066_data_choose(

@@ -196,11 +196,11 @@ module ysyx_040066_cpu(
 //        $display("error:%b %b,data_valid=%b",error,module_wb.error,data_Rd_error);
     end
 
-    always @(*) if(!rst) begin
-        `ifdef INSTR
-        if(~clk) $display("done:nxtpc=%h,out_valid=%b,error=%b,global_block=%b",pc_nxt,out_valid,error,global_block);
-        `endif
+    `ifdef INSTR
+    always @(*) if(!rst) begin        
+        if(~clk) $display("done:nxtpc=%h,out_valid=%b,error=%b,global_block=%b",pc_nxt,out_valid,error,global_block);        
         //if(~clk&&pc_nxt[31:0]>=32'h30000ee0&&pc_nxt[31:0]<=32'h30000fec)$display("%h:s0=%h,a0=%h,circle=%d",pc_nxt[31:0],module_regs.module_regs.rf[8],module_regs.module_regs.rf[10],module_client.mtime);
 //        if(clk) $display("iscsr?%b,Funct3=%b,csrwen=",iscsr,instr[14:12],csr_wen&&~error_temp);
     end
+    `endif
 endmodule

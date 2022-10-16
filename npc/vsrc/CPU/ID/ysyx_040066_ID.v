@@ -83,12 +83,12 @@ module ysyx_040066_ID (
 
     assign valid=valid_native&&~rs_block&&~jmp;
 
+    `ifdef INSTR
     always @(*) begin
-        `ifdef INSTR
         if(~rst&&~clk) $display("ID:pc=%h,instr=%h,valid=%h,MemWr=%b,rs_block=%b,error=%b",pc,instr,valid,MemWr,rs_block,error);
-        `endif
 //        $display("Instr=%h,error=%h",instr,error);
     end
+    `endif
 
 endmodule
 
@@ -187,10 +187,10 @@ module ysyx_040066_Decode (
 
     assign error=err||!(OP[1:0]==2'b11);
 
-    always @(*) begin
+    //always @(*) begin
         
         //$display("OP=%b,done=%b",OP,done);
-    end
+    //end
 
 endmodule
 

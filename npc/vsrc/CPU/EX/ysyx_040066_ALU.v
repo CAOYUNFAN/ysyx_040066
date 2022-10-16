@@ -34,9 +34,9 @@ module ysyx_040066_ALU(
     assign add_lowbit=Add_result[2:0];
     assign zero=~|(data_input^datab_input);
 
-    always @(*) begin
+//    always @(*) begin
 //        $display("ALU:data_input=%x,datab_input=%x,Add_result=%x,result=%x,aluctr=%b,zero=%b",data_input,datab_input,Add_result,result,aluctr,zero);
-    end
+//    end
 
 endmodule
 

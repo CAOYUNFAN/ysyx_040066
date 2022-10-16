@@ -33,8 +33,8 @@ module ysyx_040066_nxtPC(
     assign nxtpc=(NxtASrc?BusA:in_pc)+(NxtBSrc?Imm:64'h4);
     assign is_jmp=NxtASrc||NxtBSrc;
     
-    always @(*) begin
+    //always @(*) begin
         //$display("nxtPC:A=%b,B=%b",NxtASrc,NxtBSrc);
-    end
+    //end
 
 endmodule
