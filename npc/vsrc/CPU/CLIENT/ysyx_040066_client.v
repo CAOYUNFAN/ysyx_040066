@@ -27,8 +27,11 @@ module ysyx_040066_clinet (
             mtimecmp<=64'h100;
         end else if(MemWr&&data_valid) begin
             mtime<=(addr[15:0]==16'hbff8)?data:mtime+64'h1;
-            mtimecmp<=(addr[15:0]==16'h4000)?data:mtimecmp;skip_ref();
+            mtimecmp<=(addr[15:0]==16'h4000)?data:mtimecmp;
         end else mtime<=mtime+64'h1;
+        `ifdef WORKBENCH
+            if((MemRd||MemWr)&&data_valid) skip_ref();
+        `endif
     end
 
     assign intr=(mtime>mtimecmp);
