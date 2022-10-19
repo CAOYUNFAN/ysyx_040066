@@ -47,7 +47,9 @@ module ysyx_040066_csr (
     endcase
 
     assign csr_data=(csr_rd_addr==csr_wr_addr&&wen)?in_data:csr_data_native;
-
+    `ifdef WORKBENCH
+    import "DPI-C" function void raise_intr_timer(input longint NO, input longint pc);
+    `endif
     assign wr_err=wen&&
                     (csr_wr_addr!=12'h341)&&
                     (csr_wr_addr!=12'h300)&&
@@ -85,7 +87,9 @@ module ysyx_040066_csr (
                     //$display("csr_addr=%h,in_data=%h",csr_wr_addr,in_data);
                 end else begin
                     if(raise_intr) begin
-                        //$display("raise_intr,wen=%b",wen);
+                        `ifdef WORKBENCH
+                        if(NO[63]) raise_intr_timer(NO,pc);
+                        `endif
                         mcause <= NO;
                         mepc <= pc;
                         mtval <= tval;

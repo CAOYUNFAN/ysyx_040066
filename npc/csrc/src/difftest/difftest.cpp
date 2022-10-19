@@ -68,6 +68,7 @@ static void checkregs(CPU_state *ref, uLL pc) {
 }
 
 static int difftest_enabled=1;
+extern uLL intr_NO,intr_pc,intr_is_jmp;
 void difftest_step(uLL pc, uLL npc) {
     if(!difftest_enabled) return;
     CPU_state ref_r;
@@ -77,12 +78,20 @@ void difftest_step(uLL pc, uLL npc) {
         // to skip the checking of an instruction, just copy the reg state to reference design
         ref_difftest_regcpy(current_cpu(), DIFFTEST_TO_REF);
         swap(is_skip_ref_pc[i],is_skip_ref_pc[--num]);
+        if(intr_is_jmp&&intr_pc==npc){
+            ref_difftest_raise_intr(intr_NO);
+            intr_is_jmp=0;
+        }
         //Log("pc=%llx,nxt=%lx",npc,mycpu->pc_nxt);
         return;
     }
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
     checkregs(&ref_r, npc);
+    if(intr_is_jmp&&intr_pc==npc){
+        ref_difftest_raise_intr(intr_NO);
+        intr_is_jmp=0;
+    }
 }
 
 void disable_difftest(){difftest_enabled=0;}

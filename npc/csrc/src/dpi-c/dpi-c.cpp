@@ -5,6 +5,7 @@
 #include "verilated_dpi.h"
 
 uint64_t *cpu_gpr = NULL, *pc =NULL,*pc_m=NULL;
+uLL intr_NO,intr_pc,intr_is_jmp;
 status_of_cpu cpu_status;
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
@@ -20,6 +21,10 @@ extern "C" void set_pc_m_ptr(const svOpenArrayHandle r){
 
 extern "C" void status_now(unsigned status){
     memcpy(&cpu_status,&status,1);
+}
+
+extern "C" void raise_timer_intr(uLL NO,uLL pc){
+    intr_NO=NO;intr_pc=pc;intr_is_jmp=1;
 }
 
 extern "C" void data_read(uLL raddr,uLL *rdata,u8 * error){
