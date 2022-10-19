@@ -17,13 +17,17 @@ module ysyx_040066_clinet (
     always @(posedge clk) MemRd_time<=~MemRd_real;
     always @(posedge clk) error<=addr[15:0]!=16'h4000&&addr[15:0]!=16'hbff8&&data_valid;
 
+    `ifdef WORKBENCH
+        import "DPI-C" function void skip_ref();
+    `endif
+
     always @(posedge clk) begin
         if(rst) begin
             mtime<=0;
             mtimecmp<=64'h100;
         end else if(MemWr&&data_valid) begin
             mtime<=(addr[15:0]==16'hbff8)?data:mtime+64'h1;
-            mtimecmp<=(addr[15:0]==16'h4000)?data:mtimecmp;
+            mtimecmp<=(addr[15:0]==16'h4000)?data:mtimecmp;skip_ref();
         end else mtime<=mtime+64'h1;
     end
 

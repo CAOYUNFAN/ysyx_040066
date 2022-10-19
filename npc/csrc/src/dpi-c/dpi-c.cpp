@@ -27,6 +27,11 @@ extern "C" void raise_intr_timer(uLL NO,uLL pc){
     intr_NO=NO;intr_pc=pc;intr_is_jmp=1;
 }
 
+extern void difftest_skip_ref();
+extern "C" void skip_ref(){
+    difftest_skip_ref();
+}
+
 extern "C" void data_read(uLL raddr,uLL *rdata,u8 * error){
     for(int i=0;i<6;i++) if(device_table[i]->in_range(raddr)){
         device_table[i]->input(raddr,rdata,error);
