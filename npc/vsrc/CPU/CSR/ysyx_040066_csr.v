@@ -61,7 +61,7 @@ module ysyx_040066_csr (
 
     always @(posedge clk) begin
         if(rst) begin
-            mstatus<=64'ha0001800;
+            mstatus<=64'ha00001800;
             mie<=64'h0;
             mip<=64'h0;
         end else begin
