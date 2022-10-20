@@ -15,7 +15,7 @@ CFLAGS_NPC = -I$(CSRC_INCLUDE_DIR) -O3 $(INSTR) #-DMTRACE
 VFLAGS = $(INSTR) -O3 -DWORKBENCH #-DEMU_MUTLI
 LDFLAGS =-lSDL2 
 CPPFLAGS += #-DVL_DEBUG
-Verilatorflags =--x-assign fast --x-initial fast --build -j 4 --clk clock --threads 2
+Verilatorflags =--x-assign fast --x-initial fast --build -j 4 --clk clock --no-threads
 
 DIFF = --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
 IMG ?= 
