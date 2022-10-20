@@ -88,7 +88,7 @@ void difftest_step(uLL pc, uLL npc) {
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
     checkregs(&ref_r, npc);
-    if(intr_is_jmp&&intr_pc==npc){printf("jmp!\n");
+    if(intr_is_jmp&&intr_pc==npc){
         ref_difftest_raise_intr(intr_NO);
         intr_is_jmp=0;
     }

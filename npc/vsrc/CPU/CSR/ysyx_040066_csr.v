@@ -67,7 +67,7 @@ module ysyx_040066_csr (
             mie<=64'h0;
             mip<=64'h0;
         end else begin
-            if(ret) begin $display("ret");
+            if(ret) begin
                 mstatus[12:11]<=2'b00;
                 mstatus[3]<=mstatus[7];
                 mstatus[7]<=1'b1;
