@@ -23,7 +23,7 @@ extern "C" void status_now(unsigned status){
     memcpy(&cpu_status,&status,1);
 }
 
-extern "C" void raise_intr_timer(uLL NO,uLL pc){printf("raise_intr!%lld %lld\n",NO,pc);
+extern "C" void raise_intr_timer(uLL NO,uLL pc){printf("raise_intr!%llx %llx\n",NO,pc);
     intr_NO=NO;intr_pc=pc;intr_is_jmp=1;
 }
 

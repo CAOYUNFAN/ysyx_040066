@@ -87,9 +87,6 @@ module ysyx_040066_csr (
                     //$display("csr_addr=%h,in_data=%h",csr_wr_addr,in_data);
                 end else begin
                     if(raise_intr) begin
-                        `ifdef WORKBENCH
-                        if(NO[63]) raise_intr_timer(NO,pc);$display("intr:%d %x",NO,pc);
-                        `endif
                         mcause <= NO;
                         mepc <= pc;
                         mtval <= tval;
@@ -107,6 +104,11 @@ module ysyx_040066_csr (
     always @(*) begin
         if(~rst&&~clk&&wen) $display("CSR:write %h",csr_wr_addr);
     end 
+    `endif
+    `ifdef WORKBENCH
+    always @(*) begin
+        if(~rst&&~clk&&raise_intr&&NO[63]) raise_intr_timer(NO,pc);
+    end
     `endif
 
 endmodule
