@@ -11,10 +11,11 @@ EMU_DIR := $(NPC_HOME)/emu
 EMU_TOP_MODULE :=$(STUID)
 EMU_TARGET := emu
 INSTR = #-DINSTR #-DR_W -Dfully_info
-CFLAGS_NPC = -I$(CSRC_INCLUDE_DIR) -g -O2 $(INSTR) #-DMTRACE
+CFLAGS_NPC = -I$(CSRC_INCLUDE_DIR) -g -O3 $(INSTR) #-DMTRACE
 VFLAGS = $(INSTR) -O3 -DWORKBENCH #-DEMU_MUTLI
 LDFLAGS =-lSDL2 
 CPPFLAGS += #-DVL_DEBUG
+Verilatorflags = -O3 --x-assign fast --x-initial fast 
 
 DIFF = --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
 IMG ?= 
@@ -27,7 +28,7 @@ $(EMU_DIR)/$(EMU_TARGET): $(VSRC_FILES) $(CSRC_FILES) $(CSRC_INCLUDE)
 		--top-module $(EMU_TOP_MODULE)\
 		--prefix $(EMU_TARGET)\
 		--exe $(CSRC_FILES)\
-		$(VFLAGS)\
+		$(Verilatorflags) $(VFLAGS)\
 		$(VSRC_FILES)
 	@make -C $(EMU_DIR) -f $(EMU_TARGET).mk -j4 
 
