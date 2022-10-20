@@ -15,7 +15,7 @@ CFLAGS_NPC = -I$(CSRC_INCLUDE_DIR) -O3 $(INSTR) #-DMTRACE
 VFLAGS = $(INSTR) -O3 -DWORKBENCH #-DEMU_MUTLI
 LDFLAGS =-lSDL2 
 CPPFLAGS += #-DVL_DEBUG
-Verilatorflags =--x-assign fast --x-initial fast 
+Verilatorflags =--x-assign fast --x-initial fast --build -j 4 --clk clock --threads 3
 
 DIFF = --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
 IMG ?= 
@@ -30,7 +30,6 @@ $(EMU_DIR)/$(EMU_TARGET): $(VSRC_FILES) $(CSRC_FILES) $(CSRC_INCLUDE)
 		--exe $(CSRC_FILES)\
 		$(Verilatorflags) $(VFLAGS)\
 		$(VSRC_FILES)
-	@make -C $(EMU_DIR) -f $(EMU_TARGET).mk -j4 
 
 sim: $(EMU_DIR)/$(EMU_TARGET)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
