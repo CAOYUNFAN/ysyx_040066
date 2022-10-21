@@ -26,7 +26,7 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	make -C $(NPC_HOME) sim ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin -j4
+	make -C $(NPC_HOME) sim ARGS="$(NPCFLAGS) -b" IMG=$(IMAGE).bin -j4
 
 gdb: image
 	make -C $(NPC_HOME) sim_gdb ARGS="$(NPCFLAGS) -b" IMG=$(IMAGE).bin -j4
