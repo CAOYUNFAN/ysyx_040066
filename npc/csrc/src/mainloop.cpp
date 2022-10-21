@@ -145,6 +145,7 @@ void cpu_exec(uLL n){
     while (n--){
         oldpc=*pc;
         int tt=0;
+        Log("123");
         cpu_exec_once();
         //while(!cpu_status.valid&&tt<200) cpu_exec_once(),++tt;
         //if(!cpu_status.valid){
