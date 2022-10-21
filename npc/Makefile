@@ -1,6 +1,6 @@
-.PHONY:sim clear sim_gdb find_display
+.PHONY:sim clear sim_gdb
 
-STUID := ysyx_040066
+STUID := ysyx_040053
 CSRC_DIR := $(NPC_HOME)/csrc/src/
 CSRC_FILES := $(shell find $(CSRC_DIR) -name "*.cpp")
 CSRC_INCLUDE_DIR := $(NPC_HOME)/csrc/include/
@@ -18,13 +18,17 @@ LDFLAGS =-lSDL2
 CPPFLAGS += #-DVL_DEBUG
 Verilatorflags =--x-assign fast --x-initial fast --build -j 4 --clk clock --threads-max-mtasks 4
 
-DIFF = --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
+DIFF = #--diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
 IMG ?= 
 ARGS ?= --log=$(NPC_HOME)/emu/log.txt
 
-$(EMU_DIR)/$(EMU_TARGET): $(VSRC_FILES) $(CSRC_FILES) $(CSRC_INCLUDE)
+$(EMU_DIR)/$(EMU_TARGET): $(VSRC_MERGE) $(CSRC_FILES) $(CSRC_INCLUDE)
+
+#$(VSRC_MERGE):$(VSRC_FILES)
+#	@cat $(VSRC_FILES) > $(VSRC_MERGE)
+
+$(EMU_DIR)/$(EMU_TARGET): $(VSRC_MERGE) $(CSRC_FILES) $(CSRC_INCLUDE)
 	@echo "Verilator VSRC_FILES > EMU_DIR"
-	@cat $(VSRC_FILES) > $(VSRC_MERGE)
 	@verilator --cc $(addprefix -CFLAGS , $(CFLAGS_NPC)) $(addprefix -LDFLAGS , $(LDFLAGS))\
 		-Mdir $(@D)\
 		--top-module $(EMU_TOP_MODULE)\
@@ -42,9 +46,6 @@ sim_gdb: $(EMU_DIR)/$(EMU_TARGET)
 	gdb -s $< --args $< $(ARGS) $(DIFF) $(IMG)
 
 clear:
-	rm -rf $(EMU_DIR)
-
-find_display:
-	grep -nIR -n1 "display" vsrc/
+	rm -rf $(EMU_DIR) $(VSRC_MERGE)
 
 include ../Makefile
