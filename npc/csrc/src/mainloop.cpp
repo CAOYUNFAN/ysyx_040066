@@ -154,7 +154,7 @@ void cpu_exec(uLL n){
         total_ins++;
         if(!*cpu_status.valid){
           Log("npc run too much cycles!");
-          reg_display();
+          reg_display(); statistics();
           exit(1);
         }
         if(*cpu_status.valid&&(*cpu_status.error||*cpu_status.done)) {

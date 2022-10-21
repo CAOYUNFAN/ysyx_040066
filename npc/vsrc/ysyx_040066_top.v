@@ -100,7 +100,7 @@ module ysyx_040066_top(
   import "DPI-C" function void set_pc_m_ptr(input logic [63:0] pc_m []);
   initial set_pc_m_ptr(pc_m);
   import "DPI-C" function void set_status(input bit done[],input bit error[],input bit valid []);
-  initial set_status(done,error,valid);
+  initial set_status(done,error,valid); always @(*) if(~rst&&~clk&&done&&error) $display("ERROR");
   integer i;
   always @(*) begin
     for(i=1;i<32;i=i+1) dbg_regs[i]=cpu.module_regs.module_regs.rf[i];
