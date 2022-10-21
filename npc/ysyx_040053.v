@@ -2311,9 +2311,9 @@ module ysyx_040053_core(
     assign wb_instr = wb_instr_r;
     assign ebreak_commit = ebreak_commit_r;
     assign next_pc = next_pc_r;
-    //always@(*) begin
-    //  if(ebreak_commit) c_trap(1);
-    //end
+    always@(*) begin
+      if(ebreak_commit) c_trap(1);
+    end
     ///////////Regfile///////////
     ysyx_040053_RegisterFile regfile(.clk(clk),
                                               .rst(rst),
@@ -2665,7 +2665,7 @@ module ysyx_040053_EXU(
     assign ALURes = res;
 endmodule
 
-//import "DPI-C" function void c_trap(input bit done);
+import "DPI-C" function void c_trap(input bit done);
 
 module ysyx_040053_IDU(
     input  [31:0] instr_i,
