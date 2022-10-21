@@ -15,7 +15,7 @@ static const char *keyname[256] __attribute__((used)) = {
   AM_KEYS(NAME)
 };
 
-size_t serial_write(const void *buf, size_t offset, size_t len) {
+size_t serial_write(void *buf, size_t offset, size_t len) {
   const char * ch=buf;
   for(int i=0;i<len;i++,ch++) putch(*ch);
   return len;
@@ -50,7 +50,7 @@ static inline void dispinfo_init(){
   dispinfo_len=strlen(dispinfo)+1;
 }
 
-size_t fb_write(const void *buf, size_t offset, size_t len) {
+size_t fb_write(void *buf, size_t offset, size_t len) {
   offset/=sizeof(uint32_t);
   size_t w=disp_info.width;
   io_write(AM_GPU_FBDRAW,offset%w,offset/w,buf,len/sizeof(uint32_t),1,true);

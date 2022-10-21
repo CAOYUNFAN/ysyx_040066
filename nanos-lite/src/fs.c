@@ -2,7 +2,7 @@
 #include <device.h>
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
-typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
+typedef size_t (*WriteFn) (void *buf, size_t offset, size_t len);
 
 typedef struct {
   char *name;
@@ -20,7 +20,7 @@ size_t invalid_read(void *buf, size_t offset, size_t len) {
   return 0;
 }
 
-size_t invalid_write(const void *buf, size_t offset, size_t len) {
+size_t invalid_write(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
   return 0;
 }
@@ -66,7 +66,7 @@ size_t fs_read(int fd, void *buf, size_t len){
   return len;
 }
 
-size_t fs_write(int fd, const void *buf, size_t len){
+size_t fs_write(int fd, void *buf, size_t len){
   if(fd<0||fd>=file_num) return -1;
   Finfo * file=&file_table[fd];
   if(file->write) {

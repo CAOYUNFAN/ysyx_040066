@@ -7,6 +7,7 @@ CSRC_INCLUDE_DIR := $(NPC_HOME)/csrc/include/
 CSRC_INCLUDE := $(shell find $(CSRC_INCLUDE) -name "*.h")
 VSRC_DIR := $(NPC_HOME)/vsrc
 VSRC_FILES := $(shell find $(VSRC_DIR) -name "*.v")
+VSRC_MERGE := $(NPC_HOME)/$(STUID).v
 EMU_DIR := $(NPC_HOME)/emu
 EMU_TOP_MODULE :=$(STUID)
 EMU_TARGET := emu
@@ -23,13 +24,14 @@ ARGS ?= --log=$(NPC_HOME)/emu/log.txt
 
 $(EMU_DIR)/$(EMU_TARGET): $(VSRC_FILES) $(CSRC_FILES) $(CSRC_INCLUDE)
 	@echo "Verilator VSRC_FILES > EMU_DIR"
+	@cat $(VSRC_FILES) > $(VSRC_MERGE)
 	@verilator --cc $(addprefix -CFLAGS , $(CFLAGS_NPC)) $(addprefix -LDFLAGS , $(LDFLAGS))\
 		-Mdir $(@D)\
 		--top-module $(EMU_TOP_MODULE)\
 		--prefix $(EMU_TARGET)\
 		--exe $(CSRC_FILES)\
 		$(Verilatorflags) $(VFLAGS)\
-		$(VSRC_FILES)
+		$(VSRC_MERGE)
 
 sim: $(EMU_DIR)/$(EMU_TARGET)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
