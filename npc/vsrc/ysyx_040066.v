@@ -31,6 +31,7 @@ module ysyx_040066 (
     input                               clock,
     input                               reset,
     input                               io_interrupt,
+    output done,error,valid,
 
 
     input                               io_master_awready,              
@@ -191,7 +192,7 @@ module ysyx_040066 (
 
 
     ysyx_040066_top top(
-        .clk(clock),.rst(rst),
+        .clk(clock),.rst(rst),.done(done),.error(error),.valid(valid),
         .ins_req(ins_req),.ins_burst(ins_burst),.ins_addr(ins_addr),.ins_last(ins_last),
         .ins_ready(ins_ready),.ins_err(ins_err),.ins_data(ins_data),
 

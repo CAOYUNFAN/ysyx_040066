@@ -6,7 +6,6 @@
 
 uint64_t *cpu_gpr = NULL, *pc =NULL,*pc_m=NULL;
 uLL intr_NO,intr_pc,intr_is_jmp;
-status_of_cpu cpu_status;
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
@@ -17,12 +16,6 @@ extern "C" void set_pc_ptr(const svOpenArrayHandle r){
 
 extern "C" void set_pc_m_ptr(const svOpenArrayHandle r){
     pc_m=(uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
-}
-
-extern "C" void set_status(const svOpenArrayHandle done,const svOpenArrayHandle error,const svOpenArrayHandle valid){
-    cpu_status.done=(bool *)(((VerilatedDpiOpenVar*)done)->datap());
-    cpu_status.error=(bool *)(((VerilatedDpiOpenVar*)error)->datap());
-    cpu_status.valid=(bool *)(((VerilatedDpiOpenVar*)valid)->datap());
 }
 
 extern "C" void raise_intr_timer(uLL NO,uLL pc){

@@ -128,7 +128,7 @@ void statistics(){
   Log("statistics: total ins=%llu, total clk=%llu",total_ins,total_clk);
 }
 void halt_status(){
-  if(*cpu_status.error) {
+  if(mycpu->error) {
     Log("Error has happened. NPC aborted.");
     reg_display();
     exit_code=1;
@@ -141,7 +141,7 @@ void halt_status(){
 }
 
 void cpu_exec(uLL n){
-    if(*cpu_status.valid&&(*cpu_status.error||*cpu_status.done)){
+    if(mycpu->valid&&(mycpu->error||mycpu->done)){
       Log("Simulation has ended. Please restart the system mannually");
       return;
     }
@@ -150,18 +150,18 @@ void cpu_exec(uLL n){
         oldpc=*pc;
         int tt=0;
         cpu_exec_once();
-        while(!*cpu_status.valid&&tt<200) cpu_exec_once(),++tt;
+        while(!mycpu->valid&&tt<200) cpu_exec_once(),++tt;
         total_ins++;
-        if(!*cpu_status.valid){
+        if(!mycpu->valid){
           Log("npc run too much cycles!");
           reg_display(); statistics();
           exit(1);
         }
-        if(*cpu_status.valid&&(*cpu_status.error||*cpu_status.done)) {
+        if(mycpu->valid&&(mycpu->error||mycpu->done)) {
           halt_status(); statistics();
           return;
         }
-        if(*cpu_status.valid) trace_and_difftest();
+        if(mycpu->valid) trace_and_difftest();
         extern void device_update();
         device_update();
     }

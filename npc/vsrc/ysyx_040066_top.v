@@ -1,6 +1,7 @@
 //`timescale 1ns/1ps
 module ysyx_040066_top(
   input clk,rst,
+  output done,error,valid,
 
   output ins_req,ins_burst,
   output [63:0] ins_addr,
@@ -35,7 +36,7 @@ module ysyx_040066_top(
   wire instr_valid,instr_error,instr_read;
   wire data_valid,data_error;
   wire fence_i,d_ready;
-  wire error,done,valid;
+  //wire error,done,valid;
   wire [63:0] pc_nxt,pc_m;
 
   ysyx_040066_cpu cpu(
@@ -99,8 +100,6 @@ module ysyx_040066_top(
   initial set_pc_ptr(pc_nxt);
   import "DPI-C" function void set_pc_m_ptr(input logic [63:0] pc_m []);
   initial set_pc_m_ptr(pc_m);
-  import "DPI-C" function void set_status(input bit done[],input bit error[],input bit valid []);
-  initial set_status(done,error,valid); always @(*) if(~rst&&~clk&&done&&error) $display("ERROR");
   integer i;
   always @(*) begin
     for(i=1;i<32;i=i+1) dbg_regs[i]=cpu.module_regs.module_regs.rf[i];
