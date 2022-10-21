@@ -153,7 +153,7 @@ void cpu_exec(uLL n){
         //  exit(1);
         //}
         if(cpu_status.valid&&(cpu_status.error||cpu_status.done)) {
-          statistics();
+          statistics(); 
           return;
         }
         if(cpu_status.valid) trace_and_difftest();
