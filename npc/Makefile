@@ -18,7 +18,7 @@ LDFLAGS =-lSDL2
 CPPFLAGS += #-DVL_DEBUG
 Verilatorflags =--x-assign fast --x-initial fast --build -j 4 --clk clock --threads-max-mtasks 4
 
-DIFF = #--diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
+DIFF = --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
 IMG ?= 
 ARGS ?= --log=$(NPC_HOME)/emu/log.txt
 
