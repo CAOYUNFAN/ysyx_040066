@@ -40,27 +40,73 @@ module ysyx_040066_booth_walloc(
     //walloc_tree
     wire [128:0] wt_c;
     wire [129:0] wt_s;
-    /* verilator lint_off UNOPTFLAT */
-    wire [29:0] wt_cout [128:0];
+    wire [10:0] wt_cout1 [128:0];
+    wire [6:0] wt_cout2 [128:0];
+    wire [4:0] wt_cout3 [128:0];
+    wire [2:0] wt_cout4 [128:0];
+    wire [1:0] wt_cout5 [128:0];
+    wire wt_cout6 [128:0];
+    wire wt_cout7 [128:0];
 
     ysyx_040066_walloc_33bits walloc0(
-        .src_in(sw_group[32:0]),.cin(part_cout[29:0]),
-        .cout_group(wt_cout[0]),.s(wt_s[0]),.cout(wt_c[0])
+        .src_in(sw_group[32:0]),
+        .cin7(part_cout[29]),
+        .cin6(part_cout[28]),
+        .cin5(part_cout[27:26]),
+        .cin4(part_cout[25:23]),
+        .cin3(part_cout[22:18]),
+        .cin2(part_cout[17:11]),
+        .cin1(part_cout[10:0]),
+        .cout_group7(wt_cout7[0]),
+        .cout_group6(wt_cout6[0]),
+        .cout_group5(wt_cout5[0]),
+        .cout_group4(wt_cout4[0]),
+        .cout_group3(wt_cout3[0]),
+        .cout_group2(wt_cout2[0]),
+        .cout_group1(wt_cout1[0])
+        ,.s(wt_s[0]),.cout(wt_c[0])
     );
 
     genvar j;
     generate for(j=1;j<129;j=j+1) begin:gen_walloc_tree
         ysyx_040066_walloc_33bits walloc(
-            .src_in(sw_group[(j+1)*33-1:j*33]),.cin(wt_cout[j-1]),
-            .cout_group(wt_cout[j]),.s(wt_s[j]),.cout(wt_c[j])
+            .src_in(sw_group[(j+1)*33-1:j*33]),
+            .cin7(wt_cout7[j-1]),
+            .cin6(wt_cout6[j-1]),
+            .cin5(wt_cout5[j-1]),
+            .cin4(wt_cout4[j-1]),
+            .cin3(wt_cout3[j-1]),
+            .cin2(wt_cout2[j-1]),
+            .cin1(wt_cout1[j-1]),
+            .cout_group7(wt_cout7[j]),
+            .cout_group6(wt_cout6[j]),
+            .cout_group5(wt_cout5[j]),
+            .cout_group4(wt_cout4[j]),
+            .cout_group3(wt_cout3[j]),
+            .cout_group2(wt_cout2[j]),
+            .cout_group1(wt_cout1[j]),
+            .s(wt_s[j]),.cout(wt_c[j])
         );
     end endgenerate
 
-    wire [29:0] unused_cout_group;
     wire unused_cout;
     ysyx_040066_walloc_33bits walloc129(
-        .src_in(sw_group[4289:4257]),.cin(wt_cout[128]),
-        .cout_group(unused_cout_group),.s(wt_s[129]),.cout(unused_cout)
+        .src_in(sw_group[4289:4257]),
+        .cin7(wt_cout7[128]),
+        .cin6(wt_cout6[128]),
+        .cin5(wt_cout5[128]),
+        .cin4(wt_cout4[128]),
+        .cin3(wt_cout3[128]),
+        .cin2(wt_cout2[128]),
+        .cin1(wt_cout1[128]),
+        .cout_group7(),
+        .cout_group6(),
+        .cout_group5(),
+        .cout_group4(),
+        .cout_group3(),
+        .cout_group2(),
+        .cout_group1(),
+        .s(wt_s[129]),.cout(unused_cout)
     );
 
     reg is_long;
