@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include "verilated_dpi.h"
 
+
 uint64_t *cpu_gpr = NULL, *pc =NULL,*pc_m=NULL;
 uLL intr_NO,intr_pc,intr_is_jmp;
 status_of_cpu cpu_status;
@@ -57,8 +58,4 @@ extern "C" void data_write(uLL waddr, uLL wdata, u8 wmask) {
         return;
     }
     panic("Unexpected addr %llx",waddr);
-}
-
-extern "C" void c_trap(const svBit done){
-    cpu_status.done=cpu_status.valid=done;
 }

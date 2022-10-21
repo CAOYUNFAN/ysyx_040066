@@ -1,6 +1,6 @@
 .PHONY:sim clear sim_gdb
 
-STUID := ysyx_040053
+STUID := ysyx_040066
 CSRC_DIR := $(NPC_HOME)/csrc/src/
 CSRC_FILES := $(shell find $(CSRC_DIR) -name "*.cpp")
 CSRC_INCLUDE_DIR := $(NPC_HOME)/csrc/include/
@@ -24,8 +24,8 @@ ARGS ?= --log=$(NPC_HOME)/emu/log.txt
 
 $(EMU_DIR)/$(EMU_TARGET): $(VSRC_MERGE) $(CSRC_FILES) $(CSRC_INCLUDE)
 
-#$(VSRC_MERGE):$(VSRC_FILES)
-#	@cat $(VSRC_FILES) > $(VSRC_MERGE)
+$(VSRC_MERGE):$(VSRC_FILES)
+	@cat $(VSRC_FILES) > $(VSRC_MERGE)
 
 $(EMU_DIR)/$(EMU_TARGET): $(VSRC_MERGE) $(CSRC_FILES) $(CSRC_INCLUDE)
 	@echo "Verilator VSRC_FILES > EMU_DIR"
