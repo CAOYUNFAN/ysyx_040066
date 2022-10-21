@@ -15,10 +15,9 @@ typedef struct {
 } CPU_state;
 
 struct status_of_cpu{
-  bool valid : 1;
-  bool done  : 1;
-  bool error : 1;
-  unsigned long long reserved : 61;
+  bool * valid;
+  bool * error;
+  bool * done;
 };
 extern status_of_cpu cpu_status;
 

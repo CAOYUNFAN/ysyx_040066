@@ -99,8 +99,8 @@ module ysyx_040066_top(
   initial set_pc_ptr(pc_nxt);
   import "DPI-C" function void set_pc_m_ptr(input logic [63:0] pc_m []);
   initial set_pc_m_ptr(pc_m);
-  import "DPI-C" function void status_now(input longint status);
-  always @(*) status_now({61'b0,error,done,valid});
+  import "DPI-C" function void set_status(input bit done[],input bit error[],input bit valid []);
+  initial set_status(done,error,valid);
   integer i;
   always @(*) begin
     for(i=1;i<32;i=i+1) dbg_regs[i]=cpu.module_regs.module_regs.rf[i];
