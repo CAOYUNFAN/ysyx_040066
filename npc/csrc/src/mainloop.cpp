@@ -137,6 +137,7 @@ void statistics(){
 }
 
 void cpu_exec(uLL n){
+        Log("123");
     if(cpu_status.valid&&(cpu_status.error||cpu_status.done)){
       Log("Simulation has ended. Please restart the system mannually");
       return;
@@ -145,7 +146,6 @@ void cpu_exec(uLL n){
     while (n--){
         oldpc=*pc;
         int tt=0;
-        Log("123");
         cpu_exec_once();
         //while(!cpu_status.valid&&tt<200) cpu_exec_once(),++tt;
         //if(!cpu_status.valid){
