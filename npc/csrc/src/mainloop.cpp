@@ -129,9 +129,10 @@ void statistics(){
     exit_code=1;
   }
   else{
-    if(cpu_gpr[10]) Log("Npc hit bad trap.");
-    else Log("Npc hit good trap.");
-    exit_code=cpu_gpr[10];
+    Log("Hpc hit good trap.");
+    //if(cpu_gpr[10]) Log("Npc hit bad trap.");
+    //else Log("Npc hit good trap.");
+    //exit_code=cpu_gpr[10];
   }
 }
 
@@ -145,12 +146,12 @@ void cpu_exec(uLL n){
         oldpc=*pc;
         int tt=0;
         cpu_exec_once();
-        while(!cpu_status.valid&&tt<200) cpu_exec_once(),++tt;
-        if(!cpu_status.valid){
-          Log("npc run too much cycles!");
-          reg_display();
-          exit(1);
-        }
+        //while(!cpu_status.valid&&tt<200) cpu_exec_once(),++tt;
+        //if(!cpu_status.valid){
+        //  Log("npc run too much cycles!");
+        //  reg_display();
+        //  exit(1);
+        //}
         if(cpu_status.valid&&(cpu_status.error||cpu_status.done)) {
           statistics();
           return;
