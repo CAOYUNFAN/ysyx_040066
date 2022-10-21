@@ -93,19 +93,12 @@ module ysyx_040066_top(
   assign wr_addr=rd_addr;
 
 `ifdef WORKBENCH
-  reg [63:0] dbg_regs [31:0];
   import "DPI-C" function void set_gpr_ptr(input logic [63:0] a []);
-  initial set_gpr_ptr(dbg_regs);
+  initial set_gpr_ptr(cpu.module_regs.module_regs.rf);
   import "DPI-C" function void set_pc_ptr(input logic [63:0] pc []);
   initial set_pc_ptr(pc_nxt);
   import "DPI-C" function void set_pc_m_ptr(input logic [63:0] pc_m []);
   initial set_pc_m_ptr(pc_m);
-  integer i;
-  always @(*) begin
-    for(i=1;i<32;i=i+1) dbg_regs[i]=cpu.module_regs.module_regs.rf[i];
-    dbg_regs[0]=0;
-//    if(MemWr&&clk)$display("Write to:addr=%h,data=%x,help=%h,real=%h,wmask=%b",addr,data_Wr,data_Wr_help,data_Wr_data,wmask);
-  end
   `endif
   assign pc_m=cpu.module_m.nxtpc;
 endmodule
