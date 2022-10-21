@@ -104,8 +104,10 @@ static inline void deal_b(){
   mycpu->io_master_bid=0;
 }
 
+static uLL total_clk,total_ins;
 inline void cpu_exec_once(){
     mycpu->clock=1;
+    total_clk++;
     CC("One cycle-UP!");
     mycpu->eval();
     deal_b();
@@ -123,6 +125,9 @@ inline void cpu_exec_once(){
 
 extern int exit_code;
 void statistics(){
+  Log("statistics: total ins=%llu, total clk=%llu",total_ins,total_clk);
+}
+void halt_status(){
   if(cpu_status.error) {
     Log("Error has happened. NPC aborted.");
     reg_display();
@@ -146,13 +151,14 @@ void cpu_exec(uLL n){
         int tt=0;
         cpu_exec_once();
         while(!cpu_status.valid&&tt<200) cpu_exec_once(),++tt;
+        total_ins++;
         if(!cpu_status.valid){
           Log("npc run too much cycles!");
           reg_display();
           exit(1);
         }
         if(cpu_status.valid&&(cpu_status.error||cpu_status.done)) {
-          statistics();
+          halt_status(); statistics();
           return;
         }
         if(cpu_status.valid) trace_and_difftest();
