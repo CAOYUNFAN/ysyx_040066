@@ -34,80 +34,130 @@ module ysyx_040066_booth_walloc(
     end endgenerate
     
     //switch
-    wire [4289:0] sw_group;
-    ysyx_040066_switch switch(.part_group(part_group),.sw_group(sw_group));
-
+    wire [1429:0] part11,part12,part13;//130*11
+    ysyx_040066_switch switch(.part_group(part_group),.sw_group1(part11),.sw_group2(part12),.sw_group3(part13));
+    //always @(*) if(~clk)$display("CALC_NOW:%d %d",x,y);
     //walloc_tree
-    wire [128:0] wt_c;
-    wire [129:0] wt_s;
-    wire [10:0] wt_cout1 [128:0];
-    wire [6:0] wt_cout2 [128:0];
-    wire [4:0] wt_cout3 [128:0];
-    wire [2:0] wt_cout4 [128:0];
-    wire [1:0] wt_cout5 [128:0];
-    wire wt_cout6 [128:0];
-    wire wt_cout7 [128:0];
+    //first
+    wire [1429:0] wt_cout1,wt_s1;//11*130
+    assign wt_cout1 = ( part11 & part12 ) | ( part11 & part13 ) | ( part12 & part13 );
+    assign wt_s1= part11 ^ part12 ^ part13 ;
+    /*always @(*) begin
+        if(~clk) $display("11:%b %b %b,%b %b",part11[32:0],part12[32:0],part13[32:0],wt_cout1[32:0],wt_s1[32:0]);
+    end*/
 
-    ysyx_040066_walloc_33bits walloc0(
-        .src_in(sw_group[32:0]),
-        .cin7(part_cout[29]),
-        .cin6(part_cout[28]),
-        .cin5(part_cout[27:26]),
-        .cin4(part_cout[25:23]),
-        .cin3(part_cout[22:18]),
-        .cin2(part_cout[17:11]),
-        .cin1(part_cout[10:0]),
-        .cout_group7(wt_cout7[0]),
-        .cout_group6(wt_cout6[0]),
-        .cout_group5(wt_cout5[0]),
-        .cout_group4(wt_cout4[0]),
-        .cout_group3(wt_cout3[0]),
-        .cout_group2(wt_cout2[0]),
-        .cout_group1(wt_cout1[0])
-        ,.s(wt_s[0]),.cout(wt_c[0])
-    );
-
-    genvar j;
-    generate for(j=1;j<129;j=j+1) begin:gen_walloc_tree
-        ysyx_040066_walloc_33bits walloc(
-            .src_in(sw_group[(j+1)*33-1:j*33]),
-            .cin7(wt_cout7[j-1]),
-            .cin6(wt_cout6[j-1]),
-            .cin5(wt_cout5[j-1]),
-            .cin4(wt_cout4[j-1]),
-            .cin3(wt_cout3[j-1]),
-            .cin2(wt_cout2[j-1]),
-            .cin1(wt_cout1[j-1]),
-            .cout_group7(wt_cout7[j]),
-            .cout_group6(wt_cout6[j]),
-            .cout_group5(wt_cout5[j]),
-            .cout_group4(wt_cout4[j]),
-            .cout_group3(wt_cout3[j]),
-            .cout_group2(wt_cout2[j]),
-            .cout_group1(wt_cout1[j]),
-            .s(wt_s[j]),.cout(wt_c[j])
-        );
+    //second
+    wire [909:0] wt_cout2,wt_s2,part21,part22,part23; //7*130 22
+    genvar x2;
+    generate for(x2=0;x2<130;x2=x2+1) begin
+        assign {part21[x2*7+6:x2*7],part22[x2*7+6:x2*7],part23[x2*7+6:x2*7]}={
+            wt_s1[x2*11+10:x2*11],
+            (x2==0)?part_cout[9:0]:
+            wt_cout1[x2*11+9-11:x2*11-11]
+            };
     end endgenerate
+    assign wt_cout2 = ( part21 & part22 ) | ( part21 & part23 ) | ( part22 & part23 );
+    assign wt_s2= part21 ^ part22 ^ part23 ;
+    /*always @(*) begin
+        if(~clk) $display("22:%b %b %b,%b %b",part21[32:0],part22[32:0],part23[32:0],wt_cout2[32:0],wt_s2[32:0]);
+    end*/
 
-    wire unused_cout;
-    ysyx_040066_walloc_33bits walloc129(
-        .src_in(sw_group[4289:4257]),
-        .cin7(wt_cout7[128]),
-        .cin6(wt_cout6[128]),
-        .cin5(wt_cout5[128]),
-        .cin4(wt_cout4[128]),
-        .cin3(wt_cout3[128]),
-        .cin2(wt_cout2[128]),
-        .cin1(wt_cout1[128]),
-        .cout_group7(),
-        .cout_group6(),
-        .cout_group5(),
-        .cout_group4(),
-        .cout_group3(),
-        .cout_group2(),
-        .cout_group1(),
-        .s(wt_s[129]),.cout(unused_cout)
-    );
+    //third
+    wire [649:0] wt_cout3,wt_s3,part31,part32,part33; //5*130 15
+    genvar x3;
+    generate for(x3=0;x3<130;x3=x3+1) begin
+        assign {part31[x3*5+4:x3*5],part32[x3*5+4:x3*5],part33[x3*5+4:x3*5]}={
+            wt_s2[x3*7+6:x3*7],
+            (x3==0)?part_cout[17:10]:
+            {wt_cout1[x3*11+10-11],wt_cout2[x3*7+6-7:x3*7-7]}
+            };
+    end endgenerate
+    assign wt_cout3 = ( part31 & part32 ) | ( part31 & part33 ) | ( part32 & part33 );
+    assign wt_s3= part31 ^ part32 ^ part33 ;
+    /*always @(*) begin
+        if(~clk) $display("33:%b %b %b,%b %b",part31[32:0],part32[32:0],part33[32:0],wt_cout3[32:0],wt_s3[32:0]);
+    end*/
+
+    //fourth
+    wire [389:0] wt_cout4,wt_s4,part41,part42,part43; //3*130 10
+    genvar x4;
+    generate for(x4=0;x4<130;x4=x4+1) begin
+        assign {part41[x4*3+2:x4*3],part42[x4*3+2:x4*3],part43[x4*3+2:x4*3]}={
+            wt_s3[x4*5+4:x4*5],
+            (x4==0)?part_cout[21:18]:
+            wt_cout3[x4*5+3-5:x4*5-5]
+            };
+    end endgenerate
+    assign wt_cout4 = ( part41 & part42 ) | ( part41 & part43 ) | ( part42 & part43 );
+    assign wt_s4= part41 ^ part42 ^ part43 ;
+    /*always @(*) begin
+        if(~clk) $display("44:%b %b %b,%b %b",part41[32:0],part42[32:0],part43[32:0],wt_cout4[32:0],wt_s4[32:0]);
+    end*/
+
+    //fifth
+    wire [259:0] wt_cout5,wt_s5,part51,part52,part53;//2*130 7
+    genvar x5;
+    generate for(x5=0;x5<130;x5=x5+1) begin
+        assign {part51[x5*2+1:x5*2],part52[x5*2+1:x5*2],part53[x5*2+1:x5*2]}={
+            wt_s4[x5*3+2:x5*3],
+            (x5==0)?part_cout[24:22]:
+            {wt_cout3[x5*5+4-5],wt_cout4[x5*3+1-3:x5*3-3]}
+            };
+    end endgenerate
+    assign wt_cout5 = ( part51 & part52 ) | ( part51 & part53 ) | ( part52 & part53 );
+    assign wt_s5= part51 ^ part52 ^ part53 ;
+    /*always @(*) begin
+        if(~clk) $display("55:%b %b %b,%b %b",part51[32:0],part52[32:0],part53[32:0],wt_cout5[32:0],wt_s5[32:0]);
+    end*/
+
+    //sixth
+    wire [129:0] wt_cout6,wt_s6,part61,part62,part63;//5
+    genvar x6;
+    generate for(x6=0;x6<130;x6=x6+1) begin 
+        assign {part61[x6],part62[x6],part63[x6]}={
+            wt_s5[x6*2+1:x6*2],
+            x6==0?part_cout[25]:
+            wt_cout4[x6*3+2-3]
+            };
+    end endgenerate
+    assign wt_cout6 = ( part61 & part62 ) | ( part61 & part63 ) | ( part62 & part63 );
+    assign wt_s6= part61 ^ part62 ^ part63 ;
+    /*always @(*) begin
+        if(~clk) $display("66:%b %b %b,%b %b",part61[32:0],part62[32:0],part63[32:0],wt_cout6[32:0],wt_s6[32:0]);
+    end*/
+
+    //seventh
+    wire [129:0] wt_cout7,wt_s7,part71,part72,part73;//4
+    genvar x7;
+    generate for(x7=0;x7<130;x7=x7+1) begin
+        assign {part71[x7],part72[x7],part73[x7]}={
+            wt_s6[x7],
+            x7==0?part_cout[27:26]:
+            wt_cout5[x7*2+1-2:x7*2-2]
+            };
+    end endgenerate
+    assign wt_cout7 = ( part71 & part72 ) | ( part71 & part73 ) | ( part72 & part73 );
+    assign wt_s7= part71 ^ part72 ^ part73 ;
+    /*always @(*) begin
+        if(~clk) $display("77:%b %b %b,%b %b",part71[32:0],part72[32:0],part73[32:0],wt_cout7[32:0],wt_s7[32:0]);
+    end*/
+
+    //finial    
+    wire [129:0] wt_c;
+    wire [129:0] wt_s,partf1,partf2,partf3;
+    genvar xf;
+    generate for(xf=0;xf<130;xf=xf+1) begin
+        assign {partf1[xf],partf2[xf],partf3[xf]}={
+            wt_s7[xf],
+            xf==0?part_cout[29:28]:
+            {wt_cout6[xf-1],wt_cout7[xf-1]}
+            };
+    end endgenerate
+    assign wt_c=( partf1 & partf2 ) | ( partf1 & partf3 ) | ( partf2 & partf3 );
+    assign wt_s= partf1 ^ partf2 ^ partf3;
+    /*always @(*) begin
+        if(~clk) $display("ff:%b %b %b,%b %b",partf1[32:0],partf2[32:0],partf3[32:0],wt_c[32:0],wt_s[32:0]);
+    end*/
 
     reg is_long;
     reg is_w_native;
@@ -118,11 +168,10 @@ module ysyx_040066_booth_walloc(
     always @(posedge clk) if(~block) begin
         is_long<=ALUctr[0]||ALUctr[1];
         is_w_native<=is_w;
-        wt_c_native<={wt_c,part_cout[30]};
+        wt_c_native<={wt_c[128:0],part_cout[30]};
         wt_s_native<=wt_s;
         part_cout_native[1]<=part_cout[32]||part_cout[31];
         part_cout_native[0]<=part_cout[32]^part_cout[31];
-        //$display("display:wt_c=%h,wt_s%h",wt_c,wt_s);
     end
 
     wire [129:0] final_line;

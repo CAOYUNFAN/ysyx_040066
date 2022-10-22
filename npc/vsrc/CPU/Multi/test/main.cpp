@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include "emu_multi.h"
+#include "verilated_vcd_c.h"
 using namespace std;
 typedef long long LL;
 typedef unsigned long long uLL;
@@ -12,7 +13,7 @@ uLL ramdom(){
 emu_multi * emu;
 uLL a[2],b[2];
 int is_w[2],aluctr[2];
-void date_update(int pos){
+void data_update(int pos){
     emu->src1_in=a[pos]=random();
     emu->src2_in=b[pos]=random();
     emu->ALUctr_in=aluctr[pos]=rand()%4;
@@ -33,30 +34,49 @@ uLL get(int pos){
 int main(){
     srand(unsigned(time(0)));
     emu=new emu_multi;
+    //VerilatedVcdC* //tfp = new VerilatedVcdC;
+    //tfp->open("wave.vcd");
+    int maintime=0;
     printf("hello!\n");
     emu->clk=0;
     emu->eval();
+    //tfp->dump(maintime++);
     emu->clk=1;
     emu->eval();
     emu->clk=0;
     emu->eval();
-  
-    date_update(0);
+    //tfp->dump(maintime++);
+    data_update(0);
     emu->clk=1;
     emu->eval();
     emu->clk=0;
-    emu->eval();    
-    for(int i=1;i<N;i++){
-        date_update(i&1);
+    //tfp->dump(maintime++);
+    emu->eval();
+    emu->clk=1;
+    emu->eval();
+    data_update(0);
+    emu->clk=0;
+    emu->eval();
+    //tfp->dump(maintime++);
+    emu->clk=1;
+    emu->eval();
+    data_update(1);
+    emu->clk=0;
+    emu->eval();
+    //tfp->dump(maintime++);
+    printf("READY!\n");
+    for(int i=2;i<N;i++){
         emu->clk=1;
         emu->eval();
-        emu->clk=0;
-        emu->eval();
-        if(emu->result!=get((i-1)&1)){
-            int t=(i&1)^1;
+        if(emu->result!=get(i&1)){
+            int t=(i&1);
             printf("different:%lld*%lld=%ld,ALUctr=%d,is_w=%d,ref=%lld\n",a[t],b[t],emu->result,aluctr[t],is_w[t],get(t));
             return 1;
         }
+        data_update(i&1);
+        emu->clk=0;
+        emu->eval();
+        //tfp->dump(maintime++);
     }
     printf("PASSED!\n");
     return 0;

@@ -7,9 +7,8 @@ $(TARGET): $(VSRC) $(CSRC)
 	@echo "building"
 	@verilator --cc\
 		--Mdir $(@D) --top-module $(TOP_MODULE) --prefix $(@F)\
-		--exe $(CSRC) $(VSRC)\
-		--report-unoptflat
-	@make -C $(@D) -f $(@F).mk
+		--exe $(CSRC) $(VSRC) --trace --trace-fst
+	@make -C $(@D) -f $(@F).mk -j4
 
 sim: $(TARGET)
 	$< 
