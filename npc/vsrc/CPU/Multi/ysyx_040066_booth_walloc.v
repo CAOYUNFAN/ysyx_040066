@@ -48,11 +48,11 @@ module ysyx_040066_booth_walloc(
 
     //second
     wire [909:0] wt_cout2,wt_s2,part21,part22,part23; //7*130 22
+    assign {part21[6:0],part22[6:0],part23[6:0]}={wt_s1[10:0],part_cout[9:0]};
     genvar x2;
-    generate for(x2=0;x2<130;x2=x2+1) begin
+    generate for(x2=1;x2<130;x2=x2+1) begin
         assign {part21[x2*7+6:x2*7],part22[x2*7+6:x2*7],part23[x2*7+6:x2*7]}={
             wt_s1[x2*11+10:x2*11],
-            (x2==0)?part_cout[9:0]:
             wt_cout1[x2*11+9-11:x2*11-11]
             };
     end endgenerate
@@ -64,12 +64,12 @@ module ysyx_040066_booth_walloc(
 
     //third
     wire [649:0] wt_cout3,wt_s3,part31,part32,part33; //5*130 15
+    assign {part31[4:0],part32[4:0],part33[4:0]}={wt_s2[6:0],part_cout[17:10]};
     genvar x3;
-    generate for(x3=0;x3<130;x3=x3+1) begin
+    generate for(x3=1;x3<130;x3=x3+1) begin
         assign {part31[x3*5+4:x3*5],part32[x3*5+4:x3*5],part33[x3*5+4:x3*5]}={
             wt_s2[x3*7+6:x3*7],
-            (x3==0)?part_cout[17:10]:
-            {wt_cout1[x3*11+10-11],wt_cout2[x3*7+6-7:x3*7-7]}
+            wt_cout1[x3*11+10-11],wt_cout2[x3*7+6-7:x3*7-7]
             };
     end endgenerate
     assign wt_cout3 = ( part31 & part32 ) | ( part31 & part33 ) | ( part32 & part33 );
@@ -81,10 +81,10 @@ module ysyx_040066_booth_walloc(
     //fourth
     wire [389:0] wt_cout4,wt_s4,part41,part42,part43; //3*130 10
     genvar x4;
-    generate for(x4=0;x4<130;x4=x4+1) begin
+    assign {part41[2:0],part42[2:0],part43[2:0]}={wt_s3[4:0],part_cout[21:18]};
+    generate for(x4=1;x4<130;x4=x4+1) begin
         assign {part41[x4*3+2:x4*3],part42[x4*3+2:x4*3],part43[x4*3+2:x4*3]}={
             wt_s3[x4*5+4:x4*5],
-            (x4==0)?part_cout[21:18]:
             wt_cout3[x4*5+3-5:x4*5-5]
             };
     end endgenerate
@@ -96,12 +96,12 @@ module ysyx_040066_booth_walloc(
 
     //fifth
     wire [259:0] wt_cout5,wt_s5,part51,part52,part53;//2*130 7
+    assign {part51[1:0],part52[1:0],part53[1:0]}={wt_s4[2:0],part_cout[24:22]};
     genvar x5;
-    generate for(x5=0;x5<130;x5=x5+1) begin
+    generate for(x5=1;x5<130;x5=x5+1) begin
         assign {part51[x5*2+1:x5*2],part52[x5*2+1:x5*2],part53[x5*2+1:x5*2]}={
             wt_s4[x5*3+2:x5*3],
-            (x5==0)?part_cout[24:22]:
-            {wt_cout3[x5*5+4-5],wt_cout4[x5*3+1-3:x5*3-3]}
+            wt_cout3[x5*5+4-5],wt_cout4[x5*3+1-3:x5*3-3]
             };
     end endgenerate
     assign wt_cout5 = ( part51 & part52 ) | ( part51 & part53 ) | ( part52 & part53 );
@@ -113,10 +113,10 @@ module ysyx_040066_booth_walloc(
     //sixth
     wire [129:0] wt_cout6,wt_s6,part61,part62,part63;//5
     genvar x6;
-    generate for(x6=0;x6<130;x6=x6+1) begin 
+    assign {part61[0],part62[0],part63[0]}={wt_s5[1:0],part_cout[25]};
+    generate for(x6=1;x6<130;x6=x6+1) begin 
         assign {part61[x6],part62[x6],part63[x6]}={
             wt_s5[x6*2+1:x6*2],
-            x6==0?part_cout[25]:
             wt_cout4[x6*3+2-3]
             };
     end endgenerate
@@ -129,10 +129,10 @@ module ysyx_040066_booth_walloc(
     //seventh
     wire [129:0] wt_cout7,wt_s7,part71,part72,part73;//4
     genvar x7;
-    generate for(x7=0;x7<130;x7=x7+1) begin
+    assign {part71[0],part72[0],part73[0]}={wt_s6[0],part_cout[27:26]};
+    generate for(x7=1;x7<130;x7=x7+1) begin
         assign {part71[x7],part72[x7],part73[x7]}={
             wt_s6[x7],
-            x7==0?part_cout[27:26]:
             wt_cout5[x7*2+1-2:x7*2-2]
             };
     end endgenerate
@@ -146,11 +146,11 @@ module ysyx_040066_booth_walloc(
     wire [129:0] wt_c;
     wire [129:0] wt_s,partf1,partf2,partf3;
     genvar xf;
-    generate for(xf=0;xf<130;xf=xf+1) begin
+    assign {partf1[0],partf2[0],partf3[0]}={wt_s7[0],part_cout[29:28]};
+    generate for(xf=1;xf<130;xf=xf+1) begin
         assign {partf1[xf],partf2[xf],partf3[xf]}={
             wt_s7[xf],
-            xf==0?part_cout[29:28]:
-            {wt_cout6[xf-1],wt_cout7[xf-1]}
+            wt_cout6[xf-1],wt_cout7[xf-1]
             };
     end endgenerate
     assign wt_c=( partf1 & partf2 ) | ( partf1 & partf3 ) | ( partf2 & partf3 );
